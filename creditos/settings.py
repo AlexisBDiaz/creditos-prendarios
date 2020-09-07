@@ -1,5 +1,7 @@
 
-
+import os
+import dj_database_url
+from decouple import config
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -10,10 +12,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '5@#1l6z@u=6m7lh00l4d#e)yns=ir*&o1zt6kkht$0$nihmiph'
+DEBUG = config('DJANGO_DEBUG', default=True, cast=bool)
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+SECRET_KEY = config('SECRET_KEY', default='Coloca la llave default que proporciona Django')
+
 
 ALLOWED_HOSTS = ['*']
 
@@ -78,8 +80,7 @@ DATABASES = {
     }
 } '''
 
-import dj_database_url
-from decouple import config
+
 
 DATABASES = {
     'default': dj_database_url.config(
@@ -128,3 +129,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+if config('DJANGO_PRODUCTION_ENV', default=False, cast=bool):
+    from .settings_production import *
