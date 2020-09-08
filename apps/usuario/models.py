@@ -7,7 +7,11 @@ class User(models.Model):
     business    = models.IntegerField( null=False ) #Empresa en la que elabora
     antiquity   = models.IntegerField( null=False ) #Tiempo de laborar en la empresa
     loan        = models.IntegerField( null=False ) #Monto autorizado del credito
+    date        = models.CharField( max_length=20, blank=True )
   
 
     class Meta:
         db_table = "user"
+
+
+

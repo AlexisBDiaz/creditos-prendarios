@@ -23,12 +23,13 @@ class UserList(APIView):
         if serializer.is_valid():
             serializer.save()
             datas = serializer.data
-            return Response(datas)
+            return Response(datas)        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserDetail(APIView):
     def get_object(self, id):
         try:            
-            return User.objects.get(pk=id) 
+            return User.objects.get(id=id) 
         except User.DoesNotExist: 
             return False
     
@@ -39,3 +40,17 @@ class UserDetail(APIView):
             return Response(serializer.data)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+    def put(self, request , id, format=None):
+        Id = self.get_object(id)
+        serializer = UserSerializers(Id, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            datas = serializer.data
+            return Response(datas)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id, format=None):
+        user = self.get_object(id)
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
